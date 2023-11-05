@@ -10,24 +10,33 @@ function preload() {
 
 function setup() {
     canvas = createCanvas(ancho, alto);
+    fondo1=createSprite(ancho/2,alto/2,ancho,alto)
+    fondo2=createSprite(ancho+ancho/2,alto/2,ancho,alto)
+    fondo2.shapeColor="red"
+    fondo1.velocity.x=-1
+    fondo2.velocity.x=-1
     marco=createSprite(141,574.7)
     suelo=createSprite(720,603.5, ancho,10)
     marco.scale=3.2
     marco.addAnimation("correr",correr)
     marco.addAnimation("nomover",nomover)
     marco.addAnimation("saltar",saltar)
+    fondo.resize(ancho,alto)
+    fondo1.addImage(fondo)
+    fondo2.addImage(fondo)
     frameRate(40)
 }
 
 function draw() {
     image(fondo,0,0,ancho,alto)
-    marco.collide(suelo,nosalta)
-    if(saltando && marco.y<360){
-        marco.velocity.y=10
-    }
-    if(!saltando){
-    }
+    marco.collide(suelo)
     drawSprites()
+    if(fondo1.x<=-ancho/2){
+        fondo1.x=ancho+ancho/2
+    }
+     if(fondo2.x<=-ancho/2){
+        fondo2.x=ancho+ancho/2
+    }
     if(keyDown(RIGHT_ARROW)){
         marco.x=marco.x+7
         marco.mirrorX(+1)
@@ -38,21 +47,17 @@ function draw() {
         marco.mirrorX(-1)
         marco.changeAnimation("correr",correr)
     }
-    else if(keyDown(UP_ARROW)&&!saltando){
+    else if(keyDown(UP_ARROW)&&marco.y>360 &&!saltando){
         saltando=true
     marco.velocity.y=-10
     marco.changeAnimation("saltar",saltar)
     }
-    else if(keyWentUp(UP_ARROW)){
-    marco.velocity.y=10
-    marco.changeAnimation("saltar",saltar)
+    marco.velocity.y=marco.velocity.y+0.5
+    if(marco.y>572){
+        saltando=false
     }
-    if(!keyDown(LEFT_ARROW)&&!keyDown(RIGHT_ARROW)&&!saltando){
+    if(!keyDown(LEFT_ARROW)&&!keyDown(RIGHT_ARROW)&&!keyDown(UP_ARROW)){
         marco.changeAnimation("nomover",nomover)
     }
 }
- function nosalta (){
-    if(!keyDown(UP_ARROW)){
-        saltando=false
-    }
- }
+ 
