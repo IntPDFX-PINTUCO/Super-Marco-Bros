@@ -6,6 +6,8 @@ function preload() {
     correr=loadAnimation("m4.png","m3.png","m2.png","m3.png")
     nomover=loadAnimation("m1.png")
     saltar=loadAnimation("m5.png")
+    gumbacamina=loadAnimation("g1.png","g2.png")
+    gumbamuere=loadAnimation("g3.png")
 }
 
 function setup() {
@@ -13,8 +15,6 @@ function setup() {
     fondo1=createSprite(ancho/2,alto/2,ancho,alto)
     fondo2=createSprite(ancho+ancho/2,alto/2,ancho,alto)
     fondo2.shapeColor="red"
-    fondo1.velocity.x=-1
-    fondo2.velocity.x=-1
     marco=createSprite(141,574.7)
     suelo=createSprite(720,603.5, ancho,10)
     marco.scale=3.2
@@ -30,6 +30,7 @@ function setup() {
 function draw() {
     image(fondo,0,0,ancho,alto)
     marco.collide(suelo)
+    gumbaemerge()
     drawSprites()
     if(fondo1.x<=-ancho/2){
         fondo1.x=ancho+ancho/2
@@ -38,9 +39,16 @@ function draw() {
         fondo2.x=ancho+ancho/2
     }
     if(keyDown(RIGHT_ARROW)){
-        marco.x=marco.x+7
         marco.mirrorX(+1)
         marco.changeAnimation("correr",correr)
+        if(marco.x>610){
+            fondo1.x-=10
+            fondo2.x-=10
+        }
+        else{
+            marco.x=marco.x+7
+
+        }
     }
     else if(keyDown(LEFT_ARROW)){
         marco.x=marco.x-7
@@ -58,6 +66,15 @@ function draw() {
     }
     if(!keyDown(LEFT_ARROW)&&!keyDown(RIGHT_ARROW)&&!keyDown(UP_ARROW)){
         marco.changeAnimation("nomover",nomover)
+    }
+}
+function gumbaemerge(){
+    var tiempo=Math.round(random(1,10))
+    if(frameCount%160==0){
+    var gumba=createSprite(ancho-200,575)
+    gumba.addAnimation("gumbacamina",gumbacamina)
+    gumba.velocity.x=-4
+    gumba.scale=3
     }
 }
  
